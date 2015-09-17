@@ -1,10 +1,12 @@
 package module1;
 
 import processing.core.PApplet;
+import processing.core.PImage;
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.providers.AbstractMapProvider;
 import de.fhpotsdam.unfolding.providers.Google;
+import de.fhpotsdam.unfolding.providers.ImmoScout;
 import de.fhpotsdam.unfolding.providers.MBTilesMapProvider;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 
@@ -28,12 +30,15 @@ public class HelloWorld extends PApplet
 	
 	// IF YOU ARE WORKING OFFLINE: Change the value of this variable to true
 	private static final boolean offline = false;
-	
+
 	/** The map we use to display our home town: La Jolla, CA */
 	UnfoldingMap map1;
 	
 	/** The map you will use to display your home town */ 
 	UnfoldingMap map2;
+	
+	/** The background image */
+	PImage backgroundImage;
 
 	public void setup() {
 		size(800, 600, P2D);  // Set up the Applet window to be 800x600
@@ -41,9 +46,10 @@ public class HelloWorld extends PApplet
 		                      // Processing library's 2D drawing
 		                      // You'll learn more about processing in Module 3
 
-		// This sets the background color for the Applet.  
-		// Play around with these numbers and see what happens!
-		this.background(200, 200, 200);
+		// This sets the background image for the Applet.
+		String url = "http://dbfreebies.co/img/big/1122918-Ambient-Background-FREE-DL.png";
+		backgroundImage = loadImage(url, "png");
+		this.background(backgroundImage);
 		
 		// Select a map provider
 		AbstractMapProvider provider = new Google.GoogleTerrainProvider();
@@ -57,7 +63,7 @@ public class HelloWorld extends PApplet
 			// 3 is the maximum zoom level for working offline
 			zoomLevel = 3;
 		}
-		
+
 		// Create a new UnfoldingMap to be displayed in this window.  
 		// The 2nd-5th arguments give the map's x, y, width and height
 		// When you create your map we want you to play around with these 
@@ -65,25 +71,35 @@ public class HelloWorld extends PApplet
 		// The 6th argument specifies the map provider.  
 		// There are several providers built-in.
 		// Note if you are working offline you must use the MBTilesMapProvider
-		map1 = new UnfoldingMap(this, 50, 50, 350, 500, provider);
+		map1 = new UnfoldingMap(this, 30, 50, 350, 500, provider);
 
 		// The next line zooms in and centers the map at 
 	    // 32.9 (latitude) and -117.2 (longitude)
 	    map1.zoomAndPanTo(zoomLevel, new Location(32.9f, -117.2f));
-		
+
 		// This line makes the map interactive
 		MapUtils.createDefaultEventDispatcher(this, map1);
-		
-		// TODO: Add code here that creates map2 
+
 		// Then you'll modify draw() below
+		// Selects map provider
+		AbstractMapProvider provider2 = new Google.GoogleTerrainProvider();
+
+		// Creates a new map
+		map2 = new UnfoldingMap(this, 410, 50, 350, 500, provider2);
+
+		// Zooms in and centers
+		map2.zoomAndPanTo(zoomLevel, new Location(12.90f, 77.55f));
+
+		// Makes the another map interactive
+		MapUtils.createDefaultEventDispatcher(this, map2);
 
 	}
 
 	/** Draw the Applet window.  */
 	public void draw() {
-		// So far we only draw map1...
-		// TODO: Add code so that both maps are displayed
+		// Draws both the maps
 		map1.draw();
+		map2.draw();
 	}
 
 	
