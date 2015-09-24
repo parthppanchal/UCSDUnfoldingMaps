@@ -24,7 +24,7 @@ import parsing.ParseFeed;
 /** EarthquakeCityMap
  * An application with an interactive map displaying earthquake data.
  * Author: UC San Diego Intermediate Software Development MOOC team
- * @author Your name here
+ * @author Parth P Panchal
  * Date: July 17, 2015
  * */
 public class EarthquakeCityMap extends PApplet {
@@ -77,7 +77,6 @@ public class EarthquakeCityMap extends PApplet {
 	    // in the features, and (2) how to get one property and use it
 	    if (earthquakes.size() > 0) {
 	    	PointFeature f = earthquakes.get(0);
-	    	System.out.println(f.getProperties());
 	    	Object magObj = f.getProperty("magnitude");
 	    	float mag = Float.parseFloat(magObj.toString());
 	    	// PointFeatures also have a getLocation method
@@ -86,8 +85,27 @@ public class EarthquakeCityMap extends PApplet {
 	    // Here is an example of how to use Processing's color method to generate 
 	    // an int that represents the color yellow.  
 	    int yellow = color(255, 255, 0);
+	    int red = color(255, 0, 0);
+	    int blue = color(0, 0, 255);
 	    
 	    //TODO: Add code here as appropriate
+	    for(PointFeature earthquake: earthquakes) {
+	    	SimplePointMarker newMarker = createMarker(earthquake);
+	    	float magnitude = (float) earthquake.getProperty("magnitude");
+	    	if(magnitude < 3.0) {
+				newMarker.setRadius(5);
+				newMarker.setColor(blue);
+			}
+			else if(magnitude < 4.0) {
+				newMarker.setRadius(10);
+				newMarker.setColor(yellow);
+			} else {
+				newMarker.setRadius(14);
+				newMarker.setColor(red);
+			}
+			markers.add(newMarker);
+	    }
+	    map.addMarkers(markers);
 	}
 		
 	// A suggested helper method that takes in an earthquake feature and 
@@ -111,6 +129,21 @@ public class EarthquakeCityMap extends PApplet {
 	private void addKey() 
 	{	
 		// Remember you can use Processing's graphics methods here
-	
+		fill(color(249, 244, 189));
+		rect(10, 150, 180, 300, 10);
+		fill(0);
+		textSize(28);
+		text("Earthquake", 25, 195);
+		text("Key", 75, 225);
+		textSize(15);
+		text("4.0+ Magnitude", 60, 265);
+		text("3.0+ Magnitude", 60, 305);
+		text("<3.0 Magnitude", 60, 345);
+		fill(color(255, 0, 0));
+		ellipse(40, 260, 14, 14);
+		fill(color(255, 255, 0));
+		ellipse(40, 300, 10, 10);
+		fill(color(0, 0, 255));
+		ellipse(40, 340, 5, 5);
 	}
 }
