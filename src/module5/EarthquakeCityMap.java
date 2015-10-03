@@ -20,8 +20,8 @@ import processing.core.PApplet;
 /** EarthquakeCityMap
  * An application with an interactive map displaying earthquake data.
  * Author: UC San Diego Intermediate Software Development MOOC team
- * @author Your name here
- * Date: July 17, 2015
+ * @author Parth Panchal
+ * Date: October 04, 2015
  * */
 public class EarthquakeCityMap extends PApplet {
 	
@@ -145,7 +145,15 @@ public class EarthquakeCityMap extends PApplet {
 	// 
 	private void selectMarkerIfHover(List<Marker> markers)
 	{
-		// TODO: Implement this method
+		int i = 0;
+		while(lastSelected == null && i < markers.size()) {
+			Marker m = markers.get(i);
+			if(m.isInside(map, mouseX, mouseY)) {
+				lastSelected = (CommonMarker) m;
+				lastSelected.setSelected(true);
+			}
+			i++;
+		}
 	}
 	
 	/** The event handler for mouse clicks
@@ -156,11 +164,64 @@ public class EarthquakeCityMap extends PApplet {
 	@Override
 	public void mouseClicked()
 	{
-		// TODO: Implement this method
 		// Hint: You probably want a helper method or two to keep this code
 		// from getting too long/disorganized
+		if(lastClicked != null) {
+			lastClicked.setClicked(false);
+			lastClicked = null;
+			unhideMarkers();
+		} else {
+			selectMarkerIfClicked(quakeMarkers);
+			selectMarkerIfClicked(cityMarkers);
+			if(lastClicked != null) {
+				if(lastClicked instanceof EarthquakeMarker) {
+					hideUnselectedMarkers(quakeMarkers);
+					hideMarkersOutsideThreatCircle(cityMarkers);
+				} else {
+					hideUnselectedMarkers(cityMarkers);
+					hideUnaffectingQuakeMarkers(quakeMarkers);
+				}
+			}
+		}
+	}
+
+	private void selectMarkerIfClicked(List<Marker> markers) {
+		int i = 0;
+		while(lastClicked == null && i < markers.size()) {
+			Marker m = markers.get(i);
+			if(m.isInside(map, mouseX, mouseY)) {
+				lastClicked = (CommonMarker) m;
+				lastClicked.setClicked(true);
+			}
+			i++;
+		}
+	}
+
+	public void hideUnselectedMarkers(List<Marker> markers) {
+		for(Marker marker : markers) {
+			if(!marker.equals(lastClicked)) {
+				marker.setHidden(true);
+			}
+		}
+	}
+
+	private void hideMarkersOutsideThreatCircle(List<Marker> cityMarkers) {
+		for(Marker cityMarker : cityMarkers) {
+			if(cityMarker.getLocation().getDistance(lastClicked.getLocation())
+					> ((EarthquakeMarker) lastClicked).threatCircle()) {
+				cityMarker.setHidden(true);
+			}
+		}
 	}
 	
+	private void hideUnaffectingQuakeMarkers(List<Marker> quakeMarkers) {
+		for(Marker quakeMarker : quakeMarkers) {
+			if(quakeMarker.getLocation().getDistance(lastClicked.getLocation())
+					> ((EarthquakeMarker) quakeMarker).threatCircle()) {
+				quakeMarker.setHidden(true);
+			}
+		}
+	}
 	
 	// loop over and unhide all markers
 	private void unhideMarkers() {
