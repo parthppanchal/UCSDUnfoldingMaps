@@ -2,6 +2,8 @@ package module4;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.data.Feature;
@@ -20,8 +22,8 @@ import processing.core.PApplet;
 /** EarthquakeCityMap
  * An application with an interactive map displaying earthquake data.
  * Author: UC San Diego Intermediate Software Development MOOC team
- * @author Your name here
- * Date: July 17, 2015
+ * @author Parth Panchal
+ * Date: October 04, 2015
  * */
 public class EarthquakeCityMap extends PApplet {
 	
@@ -138,20 +140,45 @@ public class EarthquakeCityMap extends PApplet {
 		
 		fill(0);
 		textAlign(LEFT, CENTER);
+		textSize(14);
+		text("Earthquake Key", 40, 75);
+
+		final int keyMarkerX = 50,
+				keyTextX = 70,
+				keyYDiff = 20;
+		int keyY = 85;
+		fill(color(147,112,219));
+		final int sideLength = 10;
+		final int halfSideLength = sideLength / 2;
+		final double circumradius =  sideLength / Math.sqrt(3.0);
+		final float y2 = (float) (keyY + keyYDiff + circumradius / 2);
+		triangle(keyMarkerX, (float) (keyY + keyYDiff - circumradius), keyMarkerX - halfSideLength, y2, keyMarkerX + halfSideLength, y2);
+
+		fill(255, 255, 255);
+		final int diameter = 15;
+		final int radius = diameter / 2;
+		ellipse(keyMarkerX, keyY + 2 * keyYDiff, diameter, diameter);
+		rect(keyMarkerX - radius, keyY + 3 * keyYDiff - radius, diameter, diameter);
+
+		fill(0);
 		textSize(12);
-		text("Earthquake Key", 50, 75);
-		
-		fill(color(255, 0, 0));
-		ellipse(50, 125, 15, 15);
-		fill(color(255, 255, 0));
-		ellipse(50, 175, 10, 10);
-		fill(color(0, 0, 255));
-		ellipse(50, 225, 5, 5);
-		
+		text("City Marker", keyTextX, keyY + keyYDiff);
+		text("Land Quake", keyTextX, keyY + 2 * keyYDiff);
+		text("Ocean Quake", keyTextX, keyY + 3 * keyYDiff);
+		text("Size - Magnitude", keyMarkerX - radius, keyY + 4 * keyYDiff);
+
+		keyY += 5 * keyYDiff + 10;
+		fill(255, 255, 0);
+		ellipse(keyMarkerX, keyY, diameter, diameter);
+		fill(0, 0, 255);
+		ellipse(keyMarkerX, keyY + keyYDiff, diameter, diameter);
+		fill(255, 0, 0);
+		ellipse(keyMarkerX, keyY + 2 * keyYDiff, diameter, diameter);
+
 		fill(0, 0, 0);
-		text("5.0+ Magnitude", 75, 125);
-		text("4.0+ Magnitude", 75, 175);
-		text("Below 4.0", 75, 225);
+		text("Shallow", keyTextX, keyY);
+		text("Intermediate", keyTextX, keyY + keyYDiff);
+		text("Deep", keyTextX, keyY + 2 * keyYDiff);
 	}
 
 	
@@ -162,10 +189,13 @@ public class EarthquakeCityMap extends PApplet {
 	// set this "country" property already.  Otherwise it returns false.
 	private boolean isLand(PointFeature earthquake) {
 		
-		// IMPLEMENT THIS: loop over all countries to check if location is in any of them
-		
-		// TODO: Implement this method using the helper method isInCountry
-		
+		// Loops over all countries to check if location is in any of them 
+		// using the helper method isInCountry
+		for(Marker countryMarker: countryMarkers) {
+			if(isInCountry(earthquake, countryMarker)) {
+				return true;
+			}
+		}
 		// not inside any country
 		return false;
 	}
@@ -178,7 +208,24 @@ public class EarthquakeCityMap extends PApplet {
 	// And LandQuakeMarkers have a "country" property set.
 	private void printQuakes() 
 	{
-		// TODO: Implement this method
+		Map<String, Integer> landQuakes = new TreeMap<>();
+		int oceanQuakes = 0;
+		for(Marker quakeMarker: quakeMarkers) {
+			if(quakeMarker instanceof LandQuakeMarker) {
+				String countryName = ((LandQuakeMarker) quakeMarker).getCountry();
+				if(!landQuakes.containsKey(countryName)) {
+					landQuakes.put(countryName, 1);
+				} else {
+					landQuakes.put(countryName, landQuakes.get(countryName) + 1);
+				}
+			} else {
+				oceanQuakes += 1;
+			}
+		}
+		for (Map.Entry<String, Integer> landQuake : landQuakes.entrySet()) {
+			System.out.println(landQuake.getKey() + ": " + landQuake.getValue());
+		}
+		System.out.println("OCEAN QUAKES: " + oceanQuakes);
 	}
 	
 	

@@ -6,7 +6,7 @@ import processing.core.PGraphics;
 /** Implements a visual marker for land earthquakes on an earthquake map
  * 
  * @author UC San Diego Intermediate Software Development MOOC team
- * @author Your name here
+ * @author Parth Panchal
  *
  */
 public class LandQuakeMarker extends EarthquakeMarker {
@@ -32,8 +32,8 @@ public class LandQuakeMarker extends EarthquakeMarker {
 		// HINT: Notice the radius variable in the EarthquakeMarker class
 		// and how it is set in the EarthquakeMarker constructor
 		
-		// TODO: Implement this method
-		
+		final float diameter = 2 * (float) Math.log1p(getRadius()) * 2.5f;
+		pg.ellipse(x, y, diameter, diameter);
 	}
 	
 
