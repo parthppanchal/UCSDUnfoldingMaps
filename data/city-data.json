@@ -39,8 +39,8 @@
 {"type":"Feature","properties":{"name":"Moscow", "population":"12.20", "country" : "Russia", "coastal" : "false"},"geometry":{"type":"Point","coordinates":[37.7500, 55.7500]}},
 {"type":"Feature","properties":{"name":"Tehran", "population":"8.15", "country" : "Iran", "coastal" : "false"},"geometry":{"type":"Point","coordinates":[51.4231, 35.6961]}},
 {"type":"Feature","properties":{"name":"Cairo", "population":"10.23", "country" : "Egypt", "coastal" : "false"},"geometry":{"type":"Point","coordinates":[31.2333, 30.0500]}},
-{"type":"Feature","properties":{"name":"Bengaluru", "population":"4.93", "country" : "India", "coastal" : "false"},"geometry":{"type":"Point","coordinates":[12.9667, 77.5667]}},
-{"type":"Feature","properties":{"name":"Surat", "population":"2.90", "country" : "India", "coastal" : "true"},"geometry":{"type":"Point","coordinates":[21.1700, 72.8300]}}
+{"type":"Feature","properties":{"name":"Bengaluru", "population":"4.93", "country" : "India", "coastal" : "false"},"geometry":{"type":"Point","coordinates":[77.5667, 12.9667]}},
+{"type":"Feature","properties":{"name":"Surat", "population":"2.90", "country" : "India", "coastal" : "true"},"geometry":{"type":"Point","coordinates":[72.8300, 21.1700]}}
 ]
 }
 
