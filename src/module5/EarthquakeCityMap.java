@@ -16,6 +16,7 @@ import de.fhpotsdam.unfolding.providers.MBTilesMapProvider;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import parsing.ParseFeed;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 
 /** EarthquakeCityMap
  * An application with an interactive map displaying earthquake data.
@@ -120,7 +121,7 @@ public class EarthquakeCityMap extends PApplet {
 		background(0);
 		map.draw();
 		addKey();
-		
+		drawTitles(g);
 	}
 	
 	/** Event handler that gets called automatically when the 
@@ -295,6 +296,13 @@ public class EarthquakeCityMap extends PApplet {
 		line(centerx-8, centery-8, centerx+8, centery+8);
 		line(centerx-8, centery+8, centerx+8, centery-8);
 			
+	}
+
+	private void drawTitles(PGraphics pg) {
+		if(lastSelected != null) {
+			final float[] lastSelectedScreenPosition = ((CommonMarker) lastSelected).getScreenPosition(map).array();
+			lastSelected.showTitle(pg, lastSelectedScreenPosition[0], lastSelectedScreenPosition[1]);
+		}
 	}
 
 	

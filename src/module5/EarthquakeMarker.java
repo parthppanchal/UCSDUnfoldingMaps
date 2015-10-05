@@ -94,16 +94,23 @@ public abstract class EarthquakeMarker extends CommonMarker
 	@Override
 	public void showTitle(PGraphics pg, float x, float y)
 	{
+		// Save previous drawing style
+		pg.pushStyle();
+
 		pg.fill(255, 255, 255);
 		pg.rectMode(PConstants.CENTER);
-		final float width = 170,
-				height = 35,
+		final float width = 190,
+				height = 40,
 				marginX = 7,
-				marginY = 30;
-		pg.rect(x, y + marginY, width, height);
+				marginY = 33;
+		pg.rect(x, y + marginY + 2, width, height);
 		pg.fill(0);
-		pg.text(getTitle(), x + marginX, y + marginY + 2, width, height);
+		pg.textAlign(PConstants.CENTER);
+		pg.text(getTitle(), x + marginX, y + marginY, width, height);
 		pg.rectMode(PConstants.CORNER);
+
+		// Restore previous drawing style
+		pg.popStyle();
 	}
 
 	
