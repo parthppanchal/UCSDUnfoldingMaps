@@ -121,6 +121,7 @@ public class EarthquakeCityMap extends PApplet {
 		background(0);
 		map.draw();
 		addKey();
+		drawLinesInsideThreatCircle(cityMarkers);
 		drawTitles(g);
 	}
 	
@@ -234,7 +235,23 @@ public class EarthquakeCityMap extends PApplet {
 			marker.setHidden(false);
 		}
 	}
-	
+
+	private void drawLinesInsideThreatCircle(List<Marker> cityMarkers) {
+		if(lastClicked instanceof OceanQuakeMarker) {
+			final float[] lastClickedScreenPosition =
+					((CommonMarker) lastClicked).getScreenPosition(map).array();
+			for(Marker cityMarker : cityMarkers) {
+				if(cityMarker.getLocation().getDistance(lastClicked.getLocation())
+						< ((OceanQuakeMarker)lastClicked).threatCircle()) {
+					final float[] cityMarkerScreenPosition =
+							((CommonMarker) cityMarker).getScreenPosition(map).array();
+					line(lastClickedScreenPosition[0], lastClickedScreenPosition[1],
+							cityMarkerScreenPosition[0], cityMarkerScreenPosition[1]);
+				}
+			}
+		}
+	}
+
 	// helper method to draw key in GUI
 	private void addKey() {	
 		// Remember you can use Processing's graphics methods here

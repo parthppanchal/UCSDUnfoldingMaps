@@ -101,13 +101,12 @@ public abstract class EarthquakeMarker extends CommonMarker
 		pg.rectMode(PConstants.CENTER);
 		final float width = 190,
 				height = 40,
-				marginX = 7,
-				marginY = 33;
-		pg.rect(x, y + marginY + 2, width, height);
+				marginX = 2,
+				marginY = 35;
+		pg.rect(x, y + marginY, width, height);
 		pg.fill(0);
 		pg.textAlign(PConstants.CENTER);
-		pg.text(getTitle(), x + marginX, y + marginY, width, height);
-		pg.rectMode(PConstants.CORNER);
+		pg.text(getTitle(), x + marginX, y + marginY + 2, width - 2 * marginX, height);
 
 		// Restore previous drawing style
 		pg.popStyle();

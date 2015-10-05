@@ -56,14 +56,13 @@ public class CityMarker extends CommonMarker {
 		pg.rectMode(PConstants.CENTER);
 		final float width = 200,
 				height = 20,
-				marginX = 7,
-				marginY = 17;
-		pg.rect(x, y + marginY + 2, width, height);
+				marginX = 2,
+				marginY = 25;
+		pg.rect(x, y + marginY, width, height);
 		pg.fill(0);
 		pg.textAlign(PConstants.CENTER);
 		pg.text(getCity() + ", " + getCountry() + ", " + getPopulation(),
-				x + marginX, y + marginY, width, height);
-		pg.rectMode(PConstants.CORNER);
+				x + marginX, y + marginY + 2, width - 2 * marginX, height);
 
 		// Restore previous drawing style
 		pg.popStyle();
