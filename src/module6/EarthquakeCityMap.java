@@ -17,12 +17,13 @@ import de.fhpotsdam.unfolding.providers.MBTilesMapProvider;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import parsing.ParseFeed;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 
 /** EarthquakeCityMap
  * An application with an interactive map displaying earthquake data.
  * Author: UC San Diego Intermediate Software Development MOOC team
- * @author Your name here
- * Date: July 17, 2015
+ * @author Parth Panchal
+ * Date: October 04, 2015
  * */
 public class EarthquakeCityMap extends PApplet {
 	
@@ -132,7 +133,8 @@ public class EarthquakeCityMap extends PApplet {
 		background(0);
 		map.draw();
 		addKey();
-		
+		drawLinesInsideThreatCircle(cityMarkers);
+		drawTitles(g);
 	}
 	
 	
@@ -261,7 +263,23 @@ public class EarthquakeCityMap extends PApplet {
 			marker.setHidden(false);
 		}
 	}
-	
+
+	private void drawLinesInsideThreatCircle(List<Marker> cityMarkers) {
+		if(lastClicked instanceof OceanQuakeMarker) {
+			final float[] lastClickedScreenPosition =
+					((CommonMarker) lastClicked).getScreenPosition(map).array();
+			for(Marker cityMarker : cityMarkers) {
+				if(cityMarker.getLocation().getDistance(lastClicked.getLocation())
+						< ((OceanQuakeMarker)lastClicked).threatCircle()) {
+					final float[] cityMarkerScreenPosition =
+							((CommonMarker) cityMarker).getScreenPosition(map).array();
+					line(lastClickedScreenPosition[0], lastClickedScreenPosition[1],
+							cityMarkerScreenPosition[0], cityMarkerScreenPosition[1]);
+				}
+			}
+		}
+	}
+
 	// helper method to draw key in GUI
 	private void addKey() {	
 		// Remember you can use Processing's graphics methods here
@@ -322,8 +340,14 @@ public class EarthquakeCityMap extends PApplet {
 		strokeWeight(2);
 		line(centerx-8, centery-8, centerx+8, centery+8);
 		line(centerx-8, centery+8, centerx+8, centery-8);
-		
-		
+
+	}
+
+	private void drawTitles(PGraphics pg) {
+		if(lastSelected != null) {
+			final float[] lastSelectedScreenPosition = ((CommonMarker) lastSelected).getScreenPosition(map).array();
+			lastSelected.showTitle(pg, lastSelectedScreenPosition[0], lastSelectedScreenPosition[1]);
+		}
 	}
 
 	
